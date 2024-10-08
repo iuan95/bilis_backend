@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -28,9 +27,9 @@ func (h *PostHandler) GetById(w http.ResponseWriter, r *http.Request){
         http.Error(w, "Invalid post id", http.StatusBadRequest)
         return
     }
-    post,err := h.service.GetPostById(context.Background(),id);
+    post,err := h.service.GetPostById(id);
     if err != nil {
-        http.Error(w, "Failed to get a post by id", http.StatusInternalServerError)
+        http.Error(w, "Failed to get post by id", http.StatusInternalServerError)
         return
     }
     w.WriteHeader(http.StatusOK)
@@ -44,7 +43,7 @@ func (h *PostHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    if err := h.service.CreatePost(context.Background(),&post); err != nil {
+    if err := h.service.CreatePost(&post); err != nil {
         http.Error(w, "Failed to create post", http.StatusInternalServerError)
         return
     }
