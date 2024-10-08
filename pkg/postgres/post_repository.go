@@ -18,7 +18,7 @@ func NewPostRepository(pool *pgxpool.Pool) usecase.PostRepository {
     return &PostRepository{pool: pool}
 }
 
-func (r *PostRepository) GetById(id int) (*entity.Post, error) {
+func (r *PostRepository) GetById(ctx context.Context,id int) (*entity.Post, error) {
 	post:= &entity.Post{}
 	query:= "SELECT id, title, description, date  FROM posts WHERE id=$1"
     err := r.pool.QueryRow(context.Background(), query, id).Scan(&post.ID, &post.Title, &post.Description, &post.Date)
@@ -28,7 +28,7 @@ func (r *PostRepository) GetById(id int) (*entity.Post, error) {
 	return post, nil
 }
 
-func (r *PostRepository) Create(post *entity.Post) error {
+func (r *PostRepository) Create(ctx context.Context,post *entity.Post) error {
 	query := "INSERT INTO posts (title, description, date) VALUES ($1, $2, $3) RETURNING id"
     return r.pool.QueryRow(context.Background(), query, post.Title, post.Description, time.Now().UTC()).Scan(&post.ID)
 
