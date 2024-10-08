@@ -35,8 +35,11 @@ func main(){
     defer db_postgres.Close()
 
 
-    postRepo:=postgres.NewPostRepository(db_postgres)
+    // базаны биэрэбин 
+    postRepo:=postgres.NewPostRepository(db_postgres) 
+     // ол кэннэ usecase(service) -ка биэрэбин
     postService:=usecase.NewPostService(postRepo)
+    // ол кэннэ handler -га биэрэбин
     postHandler:= h.NewPostHandler(postService)
 
 
