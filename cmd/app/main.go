@@ -34,13 +34,14 @@ func main(){
     db_postgres:=postgres.New()
     defer db_postgres.Close()
 
-
-    // базаны биэрэбин 
     postRepo:=postgres.NewPostRepository(db_postgres) 
-     // ол кэннэ usecase(service) -ка биэрэбин
     postService:=usecase.NewPostService(postRepo)
-    // ол кэннэ handler -га биэрэбин
     postHandler:= h.NewPostHandler(postService)
+
+
+    userRepo:=postgres.NewUserRepository(db_postgres)
+    userService:=usecase.NewUserService(userRepo)
+    userHandler:=h.NewUserHandler(userService)
 
 
 
@@ -48,6 +49,9 @@ func main(){
 
     router.HandleFunc("/post", postHandler.CreatePost).Methods("POST")
     router.HandleFunc("/post/{id}", postHandler.GetById).Methods("GET")
+    router.HandleFunc("/user", userHandler.CreateUser).Methods("POST")
+    router.HandleFunc("/user/{id}", userHandler.GetUserById).Methods("GET")
+
 
     log.Println("Server is running on port 8080...")
 
